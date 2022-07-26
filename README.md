@@ -1,0 +1,1 @@
+# newrelic-azure-metric-forwarding
