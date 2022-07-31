@@ -107,7 +107,55 @@ if [[ $functionApp == "" ]]; then
     --functions-version 4 \
     --runtime dotnet)
 
-    echo -e "Function app is created.\n"
+  echo -e "Function app is created.\n"
 else
   echo -e "Function app already exists.\n"
+fi
+
+# Function app system assigned identity
+echo "Checking function app system assigned identity..."
+
+functionAppPrincipalId=$(az functionapp identity show \
+  --resource-group $resourceGroupName \
+  --name $functionAppName \
+  | jq -r .principalId \
+  2> /dev/null)
+
+if [[ $functionAppPrincipalId == "" ]]; then
+  echo "Function app does not have system assigned identity. Creating..."
+
+  functionAppPrincipalId=$(az functionapp identity assign \
+    --resource-group $resourceGroupName \
+    --name $functionAppName \
+    | jq -r .principalId)
+
+  echo -e "Function app system assigned identity is created.\n"
+else
+  echo -e "Function app system assigned identity already exists.\n"
+fi
+
+# Account info
+subscriptionId=$(az account show | jq -r .id)
+subscriptionScope="/subscriptions/$subscriptionId"
+
+# Monitoring reader role assignment
+monitoringRoleAssignmentCount=$(az role assignment list \
+  --assignee "$functionAppPrincipalId" \
+  --role "Monitoring Reader" \
+  --scope "$subscriptionScope" \
+  | jq '. | length' \
+  2> /dev/null)
+
+if [[ $monitoringRoleAssignment -eq 0 ]]; then
+  echo "Function app does not have Monitoring Reader role. Assigning..."
+
+  monitoringRoleAssignment=$(az role assignment create \
+    --assignee "$functionAppPrincipalId" \
+    --role "Monitoring Reader" \
+    --scope "$subscriptionScope" \
+    2> /dev/null)
+
+  echo -e "Monitoring Reader role is assinged.\n"
+else
+  echo -e "Function app already has Monitoring Reader role.\n"
 fi
