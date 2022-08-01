@@ -1,4 +1,30 @@
-﻿<Properties>
-  <MonoDevelop.Ide.ItemProperties.ForwardMetrics FirstBuild="True" />
+﻿<Properties StartupConfiguration="{87A7DD82-221B-4793-8357-14D136DFB247}|Default">
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="ForwardMetrics/ForwardMetrics.cs">
+    <Files>
+      <File FileName="ForwardMetrics/ForwardMetrics.cs" Line="25" Column="45" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="ForwardMetrics" expanded="True">
+            <Node name="ForwardMetrics" expanded="True">
+              <Node name="Dependencies" expanded="True">
+                <Node name="PackageDependencies" expanded="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.ForwardMetrics PreferredExecutionTarget="MonoDevelop.Default" />
   <MultiItemStartupConfigurations />
 </Properties>

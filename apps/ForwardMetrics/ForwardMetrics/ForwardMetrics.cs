@@ -7,29 +7,74 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Azure.Identity;
+using Azure.Monitor.Query;
+using ForwardMetrics.Services.Metrics;
 
 namespace ForwardMetrics
 {
-    public static class ForwardMetrics
+    public class ForwardMetrics
     {
-        [FunctionName("ForwardMetrics")]
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-            ILogger log)
+        private readonly IMetricQueryHandler _metricQueryHandler;
+
+        public ForwardMetrics(
+            IMetricQueryHandler metricQueryHandler
+        )
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            _metricQueryHandler = metricQueryHandler;
+        }
 
-            string name = req.Query["name"];
+        [FunctionName("ForwardMetrics")]
+        public async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+            ILogger logger)
+        {
+            logger.LogInformation("C# HTTP trigger function processed a request.");
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            await _metricQueryHandler.Run(logger);
 
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
+            return new OkObjectResult("");
+        }
 
-            return new OkObjectResult(responseMessage);
+        //public async Task<string> GetAccessToken()
+        //{
+        //    var credentials = new DefaultAzureCredential();
+
+        //    //ClientCredential cc = new ClientCredential(AzureDetails.ClientID, AzureDetails.ClientSecret);
+        //    //var context = new AuthenticationContext("https://login.microsoftonline.com/" + AzureDetails.TenantID);
+        //    //var result = context.AcquireTokenAsync("https://management.azure.com/", credentials);
+        //    //if (result == null)
+        //    //{
+        //    //    throw new InvalidOperationException("Failed to obtain the Access token");
+        //    //}
+        //    //AzureDetails.AccessToken = result.Result.AccessToken;
+        //}
+
+        private async Task GetMetrics()
+        {
+            string resourceId =
+                "/subscriptions/<subscription_id>/resourceGroups/<resource_group_name>/providers/<resource_provider>/<resource>";
+
+            var metricsClient = new MetricsQueryClient(new DefaultAzureCredential());
+
+            var results = await metricsClient.QueryResourceAsync(
+                resourceId,
+                new[] { "Microsoft.OperationalInsights/workspaces" }
+            );
+
+            foreach (var metric in results.Value.Metrics)
+            {
+                Console.WriteLine(metric.Name);
+                foreach (var element in metric.TimeSeries)
+                {
+                    Console.WriteLine("Dimensions: " + string.Join(",", element.Metadata));
+
+                    foreach (var metricValue in element.Values)
+                    {
+                        Console.WriteLine(metricValue);
+                    }
+                }
+            }
         }
     }
 }
