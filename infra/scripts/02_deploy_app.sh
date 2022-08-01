@@ -39,5 +39,5 @@ az functionapp deployment source config-zip \
   --src "publish.zip"
 
 ### Clean up
-rm publish.zip .
+rm publish.zip
 cd $currentDir
