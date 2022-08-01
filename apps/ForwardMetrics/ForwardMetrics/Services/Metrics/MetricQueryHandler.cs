@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Azure.Identity;
 using Azure.Monitor.Query;
 using Microsoft.Extensions.Logging;
@@ -14,38 +15,34 @@ public interface IMetricQueryHandler
 
 public class MetricQueryHandler : IMetricQueryHandler
 {
+    private readonly string[] POSTGRES_RESOURCE_IDS = new string[]
+    {
+        "/subscriptions/<SUBSCRIPTION_ID>" +
+        "/resourceGroups/<RESOURCE_GROUP_NAME>" +
+        "/providers/Microsoft.DBforPostgreSQL/flexibleServers/<POSTGRES_DB_NAME>",
+    };
+
+    private readonly MetricsQueryClient _metricsClient;
+
     public MetricQueryHandler()
     {
+        _metricsClient = new MetricsQueryClient(new DefaultAzureCredential());
     }
 
     public async Task Run(
         ILogger logger
     )
     {
-        var resourceId =
-            "/subscriptions/e1db9504-a667-4b67-bf49-22abe8f772c7/resourceGroups/rgugureuwmetricsd001/providers/Microsoft.Web/sites/funcugureuwmetricsd001";
-
-        var metricsClient = new MetricsQueryClient(new DefaultAzureCredential());
-
-        var results = await metricsClient.QueryResourceAsync(
-            resourceId,
-            new[] { "Requests", "BytesReceived", "BytesSent", "Http2xx", "Http3xx", "Http4xx", "Http5xx"}
-        );
-
-        foreach (var metric in results.Value.Metrics)
+        var metricProcessingTasks = new List<Task>();
+        foreach (var resourceId in POSTGRES_RESOURCE_IDS)
         {
-            logger.LogInformation(metric.Name);
-
-            foreach (var element in metric.TimeSeries)
+            metricProcessingTasks.Add(Task.Run(async () =>
             {
-                logger.LogInformation("Dimensions: " + string.Join(",", element.Metadata));
-
-                foreach (var metricValue in element.Values)
-                {
-                    logger.LogInformation(metricValue.ToString());
-                }
-            }
+                await new MetricProcessor().Run(resourceId);
+            }));
         }
+
+        await Task.WhenAll(metricProcessingTasks);
     }
 }
 
