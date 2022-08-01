@@ -5,8 +5,8 @@ namespace ForwardMetrics.Services.Metrics;
 
 public class MetricApiRequestDto
 {
-    [JsonProperty("commons")]
-    public CommonMetricProperties Commons { get; set; }
+    [JsonProperty("common")]
+    public CommonMetricProperties Common { get; set; }
 
     [JsonProperty("metrics")]
     public List<CustomMetric> Metrics { get; set; }

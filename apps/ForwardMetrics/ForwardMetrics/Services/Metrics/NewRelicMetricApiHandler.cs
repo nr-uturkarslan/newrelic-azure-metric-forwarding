@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Azure.Monitor.Query.Models;
@@ -22,7 +21,8 @@ public class NewRelicMetricApiHandler
     private readonly CustomLogger _customLogger;
     private readonly HttpClient _httpClient;
 
-    public NewRelicMetricApiHandler(string subscriptionId,
+    public NewRelicMetricApiHandler(
+        string subscriptionId,
         string resourceGroupName,
         string postgresDatabaseName
     )
@@ -53,7 +53,7 @@ public class NewRelicMetricApiHandler
         {
             new MetricApiRequestDto
             {
-                Commons = new CommonMetricProperties
+                Common = new CommonMetricProperties
                 {
                     Attributes = new Dictionary<string, string>
                     {
@@ -67,7 +67,7 @@ public class NewRelicMetricApiHandler
         };
 
         if (metricResults.Count > 0)
-            requestDto[0].Commons.Attributes.Add("metricUnit", metricResults[0].Unit.ToString());
+            requestDto[0].Common.Attributes.Add("metricUnit", metricResults[0].Unit.ToString());
 
         foreach (var metricResult in metricResults)
         {
