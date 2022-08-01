@@ -1,20 +1,32 @@
 ﻿<Properties StartupConfiguration="{87A7DD82-221B-4793-8357-14D136DFB247}|Default">
+  <MultiItemStartupConfigurations />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="ForwardMetrics/ForwardMetrics.cs">
+  <MonoDevelop.Ide.ItemProperties.ForwardMetrics PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="ForwardMetrics/Services/Metrics/NewRelicMetricApiHandler.cs">
     <Files>
-      <File FileName="ForwardMetrics/ForwardMetrics.cs" Line="25" Column="45" />
+      <File FileName="ForwardMetrics/Startup.cs" Line="16" Column="6" />
+      <File FileName="ForwardMetrics/ForwardMetrics.cs" Line="37" Column="41" />
+      <File FileName="ForwardMetrics/Services/Metrics/MetricQueryHandler.cs" Line="75" Column="14" />
+      <File FileName="ForwardMetrics/Services/Metrics/MetricProcessor.cs" Line="17" Column="5" />
+      <File FileName="ForwardMetrics/Services/Metrics/NewRelicMetricApiHandler.cs" Line="89" Column="1" />
+      <File FileName="ForwardMetrics/Services/Metrics/CustomMetric.cs" Line="12" Column="30" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="ForwardMetrics" expanded="True">
             <Node name="ForwardMetrics" expanded="True">
-              <Node name="Dependencies" expanded="True">
-                <Node name="PackageDependencies" expanded="True" />
+              <Node name="Commons" expanded="True">
+                <Node name="Logging" expanded="True" />
+              </Node>
+              <Node name="Config" expanded="True">
+                <Node name="Postgres" expanded="True" />
+              </Node>
+              <Node name="Services" expanded="True">
+                <Node name="Metrics" expanded="True" />
               </Node>
             </Node>
           </Node>
@@ -25,6 +37,5 @@
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.ItemProperties.ForwardMetrics PreferredExecutionTarget="MonoDevelop.Default" />
-  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
 </Properties>

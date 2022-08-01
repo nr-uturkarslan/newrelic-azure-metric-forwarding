@@ -25,6 +25,11 @@
     <None Remove="Microsoft.Extensions.Http" />
     <None Remove="Services\" />
     <None Remove="Services\Metrics\" />
+    <None Remove="Commons\" />
+    <None Remove="Commons\Logging\" />
+    <None Remove="Config\" />
+    <None Remove="Config\PostgresConfig\" />
+    <None Remove="Commons\Exceptions\" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
@@ -38,5 +43,10 @@
   <ItemGroup>
     <Folder Include="Services\" />
     <Folder Include="Services\Metrics\" />
+    <Folder Include="Commons\" />
+    <Folder Include="Commons\Logging\" />
+    <Folder Include="Config\" />
+    <Folder Include="Config\Postgres\" />
+    <Folder Include="Commons\Exceptions\" />
   </ItemGroup>
 </Project>
