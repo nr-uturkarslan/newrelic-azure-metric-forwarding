@@ -266,7 +266,7 @@ public class NewRelicMetricApiHandler
     {
         _customLogger.Log(new CustomLog
         {
-            ClassName = nameof(MetricProcessor),
+            ClassName = nameof(NewRelicMetricApiHandler),
             MethodName = nameof(Run),
             LogLevel = LogLevel.Information,
             TimeUtc = DateTimeOffset.UtcNow,
