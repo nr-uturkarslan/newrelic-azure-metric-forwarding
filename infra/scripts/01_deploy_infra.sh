@@ -17,6 +17,7 @@ instance="001"
 resourceGroupName="rg$program$locationShort$project$stageShort$instance"
 storageAccountName="st$program$locationShort$project$stageShort$instance"
 appInsightsName="appins$program$locationShort$project$stageShort$instance"
+appServicePlanName="plan$program$locationShort$project$stageShort$instance"
 functionAppName="func$program$locationShort$project$stageShort$instance"
 
 #############
@@ -87,6 +88,27 @@ else
   echo -e "App insights already exists.\n"
 fi
 
+# # App Service plan
+# echo "Checking app service plan..."
+
+# appServicePlan=$(az appservice plan show \
+#   --resource-group $resourceGroupName \
+#   --name $appServicePlanName \
+#   2> /dev/null)
+
+# if [[ $appServicePlan == "" ]]; then
+#   echo "App service plan does not exists. Creating..."
+
+#   appServicePlan=$(az appservice plan create \
+#     --resource-group $resourceGroupName \
+#     --name $appServicePlanName \
+#     --sku "F1")
+
+#   echo -e "App service plan is created.\n"
+# else
+#   echo -e "App service plan already exists.\n"
+# fi
+
 # Function app
 echo "Checking function app..."
 
@@ -97,6 +119,9 @@ functionApp=$(az functionapp show \
 
 if [[ $functionApp == "" ]]; then
   echo "Function app does not exists. Creating..."
+
+  # # if you want to assign a plan to function app
+  # --plan $appServicePlanName \
 
   functionApp=$(az functionapp create \
     --resource-group $resourceGroupName \
