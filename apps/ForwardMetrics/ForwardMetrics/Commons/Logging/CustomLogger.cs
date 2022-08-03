@@ -27,7 +27,12 @@ public class CustomLogger
     public async Task FlushLogsToNewRelic()
     {
         var requestDto = FormatLogsAccordingToNewRelic();
-        var requestDtoAsString = JsonConvert.SerializeObject(requestDto);
+        var requestDtoAsString = JsonConvert.SerializeObject(
+            requestDto,
+            new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
 
         var stringContent = new StringContent(
             requestDtoAsString,
