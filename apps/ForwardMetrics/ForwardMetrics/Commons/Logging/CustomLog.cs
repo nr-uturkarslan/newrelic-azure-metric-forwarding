@@ -11,13 +11,13 @@ public class CustomLog
     public string ClassName { get; set; }
 
     [JsonProperty("methodName")]
-    public string MehtodName { get; set; }
+    public string MethodName { get; set; }
 
     [JsonProperty("logLevel")]
     public LogLevel LogLevel { get; set; }
 
     [JsonProperty("timeUtc")]
-    public DateTime TimeUtc { get; set; }
+    public DateTimeOffset TimeUtc { get; set; }
 
     [JsonProperty("message")]
     public string Message { get; set; }

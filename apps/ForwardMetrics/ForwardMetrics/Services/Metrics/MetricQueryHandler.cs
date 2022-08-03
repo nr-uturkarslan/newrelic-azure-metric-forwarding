@@ -14,13 +14,6 @@ public interface IMetricQueryHandler
 
 public class MetricQueryHandler : IMetricQueryHandler
 {
-    private readonly string[] POSTGRES_RESOURCE_IDS = new string[]
-    {
-        "/subscriptions/<SUBSCRIPTION_ID>" +
-        "/resourceGroups/<RESOURCE_GROUP_NAME>" +
-        "/providers/Microsoft.DBforPostgreSQL/flexibleServers/<POSTGRES_DB_NAME>",
-    };
-
     private readonly CustomLogger _customLogger;
 
     public MetricQueryHandler()
@@ -78,6 +71,8 @@ public class MetricQueryHandler : IMetricQueryHandler
         await Task.WhenAll(metricProcessingTasks);
 
         LogProcessingFinished();
+
+        await _customLogger.FlushLogsToNewRelic();
     }
 
     private void LogProcessingStarted()
@@ -85,9 +80,9 @@ public class MetricQueryHandler : IMetricQueryHandler
         _customLogger.Log(new CustomLog
         {
             ClassName = nameof(MetricQueryHandler),
-            MehtodName = nameof(Run),
+            MethodName = nameof(Run),
             LogLevel = LogLevel.Information,
-            TimeUtc = DateTime.UtcNow,
+            TimeUtc = DateTimeOffset.UtcNow,
             Message = $"Processing all Postgres DB metrics in parallel has started.",
         });
     }
@@ -97,9 +92,9 @@ public class MetricQueryHandler : IMetricQueryHandler
         _customLogger.Log(new CustomLog
         {
             ClassName = nameof(MetricQueryHandler),
-            MehtodName = nameof(Run),
+            MethodName = nameof(Run),
             LogLevel = LogLevel.Information,
-            TimeUtc = DateTime.UtcNow,
+            TimeUtc = DateTimeOffset.UtcNow,
             Message = $"Processing all Postgres DB metrics in parallel has finished.",
         });
     }

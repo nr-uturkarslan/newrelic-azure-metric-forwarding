@@ -6,19 +6,19 @@ namespace ForwardMetrics.Services.Metrics;
 public class MetricApiRequestDto
 {
     [JsonProperty("common")]
-    public CommonMetricProperties Common { get; set; }
+    public CommonNewRelicMetricProperties Common { get; set; }
 
     [JsonProperty("metrics")]
-    public List<CustomMetric> Metrics { get; set; }
+    public List<CustomNewRelicMetric> Metrics { get; set; }
 }
 
-public class CommonMetricProperties
+public class CommonNewRelicMetricProperties
 {
     [JsonProperty("attributes")]
     public Dictionary<string, string> Attributes { get; set; }
 }
 
-public class CustomMetric
+public class CustomNewRelicMetric
 {
     [JsonProperty("name")]
     public string Name { get; set; }

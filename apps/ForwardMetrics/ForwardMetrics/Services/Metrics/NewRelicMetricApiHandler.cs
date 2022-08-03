@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Azure.Monitor.Query.Models;
+using ForwardMetrics.Commons.Exceptions;
 using ForwardMetrics.Commons.Logging;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -39,8 +40,24 @@ public class NewRelicMetricApiHandler
         IReadOnlyList<MetricResult> metricResults
     )
     {
-        var requestDto = PrepareRequestDto(metricResults);
-        await FlushMetricsToNewRelic(requestDto);
+        try
+        {
+            var requestDto = PrepareRequestDto(metricResults);
+
+            await FlushMetricsToNewRelic(requestDto);
+        }
+        catch (NoMetricsToFlushException)
+        {
+            return;
+        }
+        catch (Exception e)
+        {
+            LogUnexpectedErrorOccurred(e);
+        }
+        finally
+        {
+            await _customLogger.FlushLogsToNewRelic();
+        }        
     }
 
     public List<MetricApiRequestDto> PrepareRequestDto(
@@ -53,21 +70,32 @@ public class NewRelicMetricApiHandler
         {
             new MetricApiRequestDto
             {
-                Common = new CommonMetricProperties
+                Common = new CommonNewRelicMetricProperties
                 {
                     Attributes = new Dictionary<string, string>
                     {
                         { "subscriptionId", _subscriptionId },
                         { "resourceGroupName", _resourceGroupName },
                         { "postgresDatabaseName", _postgresDatabaseName },
-                    }
+                    },
                 },
-                Metrics = new List<CustomMetric>(),
+                Metrics = new List<CustomNewRelicMetric>(),
             }
         };
 
         if (metricResults.Count > 0)
-            requestDto[0].Common.Attributes.Add("metricUnit", metricResults[0].Unit.ToString());
+        {
+            requestDto[0].Common.Attributes.Add(
+                "metricUnit",
+                metricResults[0].Unit.ToString());
+        }
+        else
+        {
+            LogNoMetricsToFlush();
+
+            throw new NoMetricsToFlushException();
+        }
+            
 
         foreach (var metricResult in metricResults)
         {
@@ -79,7 +107,7 @@ public class NewRelicMetricApiHandler
                 {
                     if (metricValue.Average.HasValue)
                     {
-                        requestDto[0].Metrics.Add(new CustomMetric
+                        requestDto[0].Metrics.Add(new CustomNewRelicMetric
                         {
                             Name = metricName,
                             Type = "gauge",
@@ -95,6 +123,7 @@ public class NewRelicMetricApiHandler
 
         return requestDto;
     }
+
     private async Task<HttpResponseMessage> FlushMetricsToNewRelic(
         List<MetricApiRequestDto> requestDto
     )
@@ -137,10 +166,26 @@ public class NewRelicMetricApiHandler
         _customLogger.Log(new CustomLog
         {
             ClassName = nameof(NewRelicMetricApiHandler),
-            MehtodName = nameof(PrepareRequestDto),
+            MethodName = nameof(PrepareRequestDto),
             LogLevel = LogLevel.Information,
             TimeUtc = DateTime.UtcNow,
             Message = $"Preparing request dto for New Relic metrics API...",
+
+            SubscriptionId = _subscriptionId,
+            ResourceGroupName = _resourceGroupName,
+            PostgresDatabaseName = _postgresDatabaseName,
+        });
+    }
+
+    private void LogNoMetricsToFlush()
+    {
+        _customLogger.Log(new CustomLog
+        {
+            ClassName = nameof(NewRelicMetricApiHandler),
+            MethodName = nameof(PrepareRequestDto),
+            LogLevel = LogLevel.Information,
+            TimeUtc = DateTime.UtcNow,
+            Message = $"No metrics are fetched to send to New Relic.",
 
             SubscriptionId = _subscriptionId,
             ResourceGroupName = _resourceGroupName,
@@ -153,7 +198,7 @@ public class NewRelicMetricApiHandler
         _customLogger.Log(new CustomLog
         {
             ClassName = nameof(NewRelicMetricApiHandler),
-            MehtodName = nameof(PrepareRequestDto),
+            MethodName = nameof(PrepareRequestDto),
             LogLevel = LogLevel.Information,
             TimeUtc = DateTime.UtcNow,
             Message = $"Request dto for New Relic metrics API is prepared.",
@@ -169,7 +214,7 @@ public class NewRelicMetricApiHandler
         _customLogger.Log(new CustomLog
         {
             ClassName = nameof(NewRelicMetricApiHandler),
-            MehtodName = nameof(FlushMetricsToNewRelic),
+            MethodName = nameof(FlushMetricsToNewRelic),
             LogLevel = LogLevel.Information,
             TimeUtc = DateTime.UtcNow,
             Message = $"Flushing metrics to New Relic.",
@@ -185,7 +230,7 @@ public class NewRelicMetricApiHandler
         _customLogger.Log(new CustomLog
         {
             ClassName = nameof(NewRelicMetricApiHandler),
-            MehtodName = nameof(FlushMetricsToNewRelic),
+            MethodName = nameof(FlushMetricsToNewRelic),
             LogLevel = LogLevel.Information,
             TimeUtc = DateTime.UtcNow,
             Message = $"Metrics are flushed to New Relic.",
@@ -203,11 +248,31 @@ public class NewRelicMetricApiHandler
         _customLogger.Log(new CustomLog
         {
             ClassName = nameof(NewRelicMetricApiHandler),
-            MehtodName = nameof(FlushMetricsToNewRelic),
+            MethodName = nameof(FlushMetricsToNewRelic),
             LogLevel = LogLevel.Error,
             TimeUtc = DateTime.UtcNow,
             Message = $"Metrics could not be flushed to New Relic.",
             Exception = exception,
+
+            SubscriptionId = _subscriptionId,
+            ResourceGroupName = _resourceGroupName,
+            PostgresDatabaseName = _postgresDatabaseName,
+        });
+    }
+
+    private void LogUnexpectedErrorOccurred(
+        Exception exception
+    )
+    {
+        _customLogger.Log(new CustomLog
+        {
+            ClassName = nameof(MetricProcessor),
+            MethodName = nameof(Run),
+            LogLevel = LogLevel.Information,
+            TimeUtc = DateTimeOffset.UtcNow,
+            Message = "Unexpected error occurred.",
+            Exception = exception.Message,
+            StackTrace = exception.StackTrace.ToString(),
 
             SubscriptionId = _subscriptionId,
             ResourceGroupName = _resourceGroupName,

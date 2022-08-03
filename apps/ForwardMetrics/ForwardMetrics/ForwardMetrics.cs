@@ -38,7 +38,7 @@ namespace ForwardMetrics
 
             LogFunctionFinished();
 
-            await _customLogger.FlushToNewRelic();
+            await _customLogger.FlushLogsToNewRelic();
 
             return new OkObjectResult("");
         }
@@ -48,9 +48,9 @@ namespace ForwardMetrics
             _customLogger.Log(new CustomLog
             {
                 ClassName = nameof(ForwardMetrics),
-                MehtodName = nameof(Run),
+                MethodName = nameof(Run),
                 LogLevel = LogLevel.Information,
-                TimeUtc = DateTime.UtcNow,
+                TimeUtc = DateTimeOffset.UtcNow,
                 Message = $"{FUNCTION_NAME} function is started.",
             });
         }
@@ -60,9 +60,9 @@ namespace ForwardMetrics
             _customLogger.Log(new CustomLog
             {
                 ClassName = nameof(ForwardMetrics),
-                MehtodName = nameof(Run),
+                MethodName = nameof(Run),
                 LogLevel = LogLevel.Information,
-                TimeUtc = DateTime.UtcNow,
+                TimeUtc = DateTimeOffset.UtcNow,
                 Message = $"{FUNCTION_NAME} function is finished.",
             });
         }

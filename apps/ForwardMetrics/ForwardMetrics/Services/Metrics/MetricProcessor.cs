@@ -63,6 +63,10 @@ public class MetricProcessor
         {
             LogUnexpectedErrorOccurred(e);
         }
+        finally
+        {
+            await _customLogger.FlushLogsToNewRelic();
+        }
     }
 
     private MetricsQueryOptions CreateMetricQueryOptions()
@@ -130,9 +134,9 @@ public class MetricProcessor
         _customLogger.Log(new CustomLog
         {
             ClassName = nameof(MetricProcessor),
-            MehtodName = nameof(CreateMetricQueryOptions),
+            MethodName = nameof(CreateMetricQueryOptions),
             LogLevel = LogLevel.Information,
-            TimeUtc = DateTime.UtcNow,
+            TimeUtc = DateTimeOffset.UtcNow,
             Message = "Metric query options are prepared.",
 
             SubscriptionId = _subscriptionId,
@@ -146,9 +150,9 @@ public class MetricProcessor
         _customLogger.Log(new CustomLog
         {
             ClassName = nameof(MetricProcessor),
-            MehtodName = nameof(PerformMetricQuery),
+            MethodName = nameof(PerformMetricQuery),
             LogLevel = LogLevel.Information,
-            TimeUtc = DateTime.UtcNow,
+            TimeUtc = DateTimeOffset.UtcNow,
             Message = "Performing metric query...",
 
             SubscriptionId = _subscriptionId,
@@ -164,9 +168,9 @@ public class MetricProcessor
         _customLogger.Log(new CustomLog
         {
             ClassName = nameof(MetricProcessor),
-            MehtodName = nameof(PerformMetricQuery),
+            MethodName = nameof(PerformMetricQuery),
             LogLevel = LogLevel.Information,
-            TimeUtc = DateTime.UtcNow,
+            TimeUtc = DateTimeOffset.UtcNow,
             Message = "Metric query is performed.",
             Exception = exception,
 
@@ -181,9 +185,9 @@ public class MetricProcessor
         _customLogger.Log(new CustomLog
         {
             ClassName = nameof(MetricProcessor),
-            MehtodName = nameof(PerformMetricQuery),
+            MethodName = nameof(PerformMetricQuery),
             LogLevel = LogLevel.Information,
-            TimeUtc = DateTime.UtcNow,
+            TimeUtc = DateTimeOffset.UtcNow,
             Message = "Metric query is performed.",
 
             SubscriptionId = _subscriptionId,
@@ -199,9 +203,9 @@ public class MetricProcessor
         _customLogger.Log(new CustomLog
         {
             ClassName = nameof(MetricProcessor),
-            MehtodName = nameof(Run),
+            MethodName = nameof(Run),
             LogLevel = LogLevel.Information,
-            TimeUtc = DateTime.UtcNow,
+            TimeUtc = DateTimeOffset.UtcNow,
             Message = "Unexpected error occurred.",
             Exception = exception.Message,
             StackTrace = exception.StackTrace.ToString(),

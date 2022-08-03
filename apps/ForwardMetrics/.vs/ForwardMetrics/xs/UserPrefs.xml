@@ -1,18 +1,16 @@
 ﻿<Properties StartupConfiguration="{87A7DD82-221B-4793-8357-14D136DFB247}|Default">
-  <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.ForwardMetrics PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="ForwardMetrics/Services/Metrics/NewRelicMetricApiHandler.cs">
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workbench ActiveDocument="ForwardMetrics/ForwardMetrics.cs">
     <Files>
-      <File FileName="ForwardMetrics/Startup.cs" Line="16" Column="6" />
-      <File FileName="ForwardMetrics/ForwardMetrics.cs" Line="37" Column="41" />
-      <File FileName="ForwardMetrics/Services/Metrics/MetricQueryHandler.cs" Line="75" Column="14" />
-      <File FileName="ForwardMetrics/Services/Metrics/MetricProcessor.cs" Line="17" Column="5" />
-      <File FileName="ForwardMetrics/Services/Metrics/NewRelicMetricApiHandler.cs" Line="89" Column="1" />
-      <File FileName="ForwardMetrics/Services/Metrics/CustomMetric.cs" Line="12" Column="30" />
+      <File FileName="ForwardMetrics/ForwardMetrics.cs" Line="15" Column="37" />
+      <File FileName="ForwardMetrics/Services/Metrics/MetricQueryHandler.cs" Line="100" Column="23" />
+      <File FileName="ForwardMetrics/Services/Metrics/MetricProcessor.cs" Line="149" Column="23" />
+      <File FileName="ForwardMetrics/Services/Metrics/NewRelicMetricApiHandler.cs" Line="173" Column="23" />
+      <File FileName="ForwardMetrics/Services/Metrics/MetricApiRequestDto.cs" Line="33" Column="26" />
+      <File FileName="ForwardMetrics/Commons/Logging/CustomLog.cs" Line="20" Column="72" />
+      <File FileName="ForwardMetrics/Commons/Logging/LogApiRequestDto.cs" Line="27" Column="40" />
+      <File FileName="ForwardMetrics/Commons/Logging/CustomLogger.cs" Line="27" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -20,6 +18,7 @@
           <Node name="ForwardMetrics" expanded="True">
             <Node name="ForwardMetrics" expanded="True">
               <Node name="Commons" expanded="True">
+                <Node name="Exceptions" expanded="True" />
                 <Node name="Logging" expanded="True" />
               </Node>
               <Node name="Config" expanded="True">
@@ -28,6 +27,7 @@
               <Node name="Services" expanded="True">
                 <Node name="Metrics" expanded="True" />
               </Node>
+              <Node name="ForwardMetrics.cs" selected="True" />
             </Node>
           </Node>
         </State>
@@ -37,5 +37,9 @@
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
+  <MultiItemStartupConfigurations />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
 </Properties>
