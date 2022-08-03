@@ -159,6 +159,9 @@ else
   echo -e "Function app system assigned identity already exists.\n"
 fi
 
+# The identity is not assigned directly, wait for a while
+sleep 5
+
 # Account info
 subscriptionId=$(az account show | jq -r .id)
 subscriptionScope="/subscriptions/$subscriptionId"

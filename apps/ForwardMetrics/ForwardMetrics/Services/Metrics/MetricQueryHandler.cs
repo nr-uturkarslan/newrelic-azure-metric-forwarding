@@ -33,15 +33,15 @@ public class MetricQueryHandler : IMetricQueryHandler
             {
                 new Subscription
                 {
-                    Id = "",
+                    Id = "subscriptionId",
                     ResourceGroups = new List<ResourceGroup>
                     {
                         new ResourceGroup
                         {
-                            Name = "",
+                            Name = "resourceGroupName",
                             PostgresDatabaseNames = new List<string>
                             {
-                                "",
+                                "postgresDatabaseName",
                             },
                         },
                     },
