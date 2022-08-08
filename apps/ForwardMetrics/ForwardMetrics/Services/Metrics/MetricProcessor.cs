@@ -204,7 +204,7 @@ public class MetricProcessor
         {
             ClassName = nameof(MetricProcessor),
             MethodName = nameof(Run),
-            LogLevel = LogLevel.Information,
+            LogLevel = LogLevel.Error,
             TimeUtc = DateTimeOffset.UtcNow,
             Message = "Unexpected error occurred.",
             Exception = exception.Message,

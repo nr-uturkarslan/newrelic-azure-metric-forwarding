@@ -168,7 +168,7 @@ public class NewRelicMetricApiHandler
             ClassName = nameof(NewRelicMetricApiHandler),
             MethodName = nameof(PrepareRequestDto),
             LogLevel = LogLevel.Information,
-            TimeUtc = DateTime.UtcNow,
+            TimeUtc = DateTimeOffset.UtcNow,
             Message = $"Preparing request dto for New Relic metrics API...",
 
             SubscriptionId = _subscriptionId,
@@ -184,7 +184,7 @@ public class NewRelicMetricApiHandler
             ClassName = nameof(NewRelicMetricApiHandler),
             MethodName = nameof(PrepareRequestDto),
             LogLevel = LogLevel.Information,
-            TimeUtc = DateTime.UtcNow,
+            TimeUtc = DateTimeOffset.UtcNow,
             Message = $"No metrics are fetched to send to New Relic.",
 
             SubscriptionId = _subscriptionId,
@@ -200,7 +200,7 @@ public class NewRelicMetricApiHandler
             ClassName = nameof(NewRelicMetricApiHandler),
             MethodName = nameof(PrepareRequestDto),
             LogLevel = LogLevel.Information,
-            TimeUtc = DateTime.UtcNow,
+            TimeUtc = DateTimeOffset.UtcNow,
             Message = $"Request dto for New Relic metrics API is prepared.",
 
             SubscriptionId = _subscriptionId,
@@ -216,7 +216,7 @@ public class NewRelicMetricApiHandler
             ClassName = nameof(NewRelicMetricApiHandler),
             MethodName = nameof(FlushMetricsToNewRelic),
             LogLevel = LogLevel.Information,
-            TimeUtc = DateTime.UtcNow,
+            TimeUtc = DateTimeOffset.UtcNow,
             Message = $"Flushing metrics to New Relic.",
 
             SubscriptionId = _subscriptionId,
@@ -232,7 +232,7 @@ public class NewRelicMetricApiHandler
             ClassName = nameof(NewRelicMetricApiHandler),
             MethodName = nameof(FlushMetricsToNewRelic),
             LogLevel = LogLevel.Information,
-            TimeUtc = DateTime.UtcNow,
+            TimeUtc = DateTimeOffset.UtcNow,
             Message = $"Metrics are flushed to New Relic.",
 
             SubscriptionId = _subscriptionId,
@@ -250,7 +250,7 @@ public class NewRelicMetricApiHandler
             ClassName = nameof(NewRelicMetricApiHandler),
             MethodName = nameof(FlushMetricsToNewRelic),
             LogLevel = LogLevel.Error,
-            TimeUtc = DateTime.UtcNow,
+            TimeUtc = DateTimeOffset.UtcNow,
             Message = $"Metrics could not be flushed to New Relic.",
             Exception = exception,
 
@@ -268,7 +268,7 @@ public class NewRelicMetricApiHandler
         {
             ClassName = nameof(NewRelicMetricApiHandler),
             MethodName = nameof(Run),
-            LogLevel = LogLevel.Information,
+            LogLevel = LogLevel.Error,
             TimeUtc = DateTimeOffset.UtcNow,
             Message = "Unexpected error occurred.",
             Exception = exception.Message,
