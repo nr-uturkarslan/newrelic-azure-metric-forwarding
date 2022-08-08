@@ -14,65 +14,56 @@ public interface IMetricQueryHandler
 
 public class MetricQueryHandler : IMetricQueryHandler
 {
+    private readonly IPostgresConfigReader _postgresConfigReader;
     private readonly CustomLogger _customLogger;
 
-    public MetricQueryHandler()
+    public MetricQueryHandler(
+        IPostgresConfigReader postgresConfigReader
+    )
     {
+        _postgresConfigReader = postgresConfigReader;
         _customLogger = new CustomLogger();
     }
 
     public async Task Run()
     {
-        LogProcessingStarted();
-
-        var metricProcessingTasks = new List<Task>();
-
-        var postgresConfig = new PostgresConfig
+        try
         {
-            Subscriptions = new List<Subscription>
+            LogProcessingStarted();
+
+            var metricProcessingTasks = new List<Task>();
+
+            var postgresConfig = await _postgresConfigReader.Run();
+            if (postgresConfig == null)
+                return;
+
+            foreach (var subscription in postgresConfig.Subscriptions)
             {
-                new Subscription
+                foreach (var resourceGroup in subscription.ResourceGroups)
                 {
-                    Id = "subscriptionId",
-                    ResourceGroups = new List<ResourceGroup>
+                    foreach (var postgresDatabaseName in resourceGroup.PostgresDatabaseNames)
                     {
-                        new ResourceGroup
-                        {
-                            Name = "resourceGroupName",
-                            PostgresDatabaseNames = new List<string>
+                        metricProcessingTasks.Add(
+                            Task.Run(async () =>
                             {
-                                "postgresDatabaseName",
-                            },
-                        },
-                    },
-                },
-            },
-        };
-
-        foreach (var subscription in postgresConfig.Subscriptions)
-        {
-            foreach (var resourceGroup in subscription.ResourceGroups)
-            {
-                foreach (var postgresDatabaseName in resourceGroup.PostgresDatabaseNames)
-                {
-                    metricProcessingTasks.Add(
-                        Task.Run(async () =>
-                        {
-                            await new MetricProcessor(
-                                subscription.Id,
-                                resourceGroup.Name,
-                                postgresDatabaseName
-                            ).Run();
-                        }));
+                                await new MetricProcessor(
+                                    subscription.Id,
+                                    resourceGroup.Name,
+                                    postgresDatabaseName
+                                ).Run();
+                            }));
+                    }
                 }
             }
+
+            await Task.WhenAll(metricProcessingTasks);
+
+            LogProcessingFinished();
         }
-
-        await Task.WhenAll(metricProcessingTasks);
-
-        LogProcessingFinished();
-
-        await _customLogger.FlushLogsToNewRelic();
+        finally
+        {
+            await _customLogger.FlushLogsToNewRelic();
+        }
     }
 
     private void LogProcessingStarted()
