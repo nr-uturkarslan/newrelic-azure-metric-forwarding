@@ -1,18 +1,13 @@
 ﻿<Properties StartupConfiguration="{87A7DD82-221B-4793-8357-14D136DFB247}|Default">
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.ForwardMetrics PreferredExecutionTarget="MonoDevelop.Default" />
-  <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.Workbench ActiveDocument="ForwardMetrics/Services/Metrics/MetricProcessor.cs">
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workbench ActiveDocument="ForwardMetrics/Services/Metrics/MetricQueryHandler.cs">
     <Files>
-      <File FileName="ForwardMetrics/ForwardMetrics.cs" Line="34" Column="10" />
-      <File FileName="ForwardMetrics/Services/Metrics/MetricQueryHandler.cs" Line="50" Column="11" />
-      <File FileName="ForwardMetrics/Services/Metrics/MetricProcessor.cs" Line="22" Column="48" />
-      <File FileName="ForwardMetrics/Services/Metrics/NewRelicMetricApiHandler.cs" Line="138" Column="31" />
-      <File FileName="ForwardMetrics/Commons/Logging/CustomLogger.cs" Line="64" Column="11" />
+      <File FileName="ForwardMetrics/ForwardMetrics.cs" Line="37" Column="40" />
+      <File FileName="ForwardMetrics/Services/Metrics/MetricQueryHandler.cs" Line="33" Column="1" />
+      <File FileName="ForwardMetrics/Services/Metrics/MetricProcessor.cs" Line="11" Column="1" />
+      <File FileName="ForwardMetrics/Services/Metrics/NewRelicMetricApiHandler.cs" Line="262" Column="1" />
+      <File FileName="ForwardMetrics/Commons/Logging/CustomLogger.cs" Line="20" Column="6" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -27,7 +22,9 @@
                 <Node name="Postgres" expanded="True" />
               </Node>
               <Node name="Services" expanded="True">
-                <Node name="Metrics" expanded="True" />
+                <Node name="Metrics" expanded="True">
+                  <Node name="MetricQueryHandler.cs" selected="True" />
+                </Node>
               </Node>
             </Node>
           </Node>
@@ -38,4 +35,9 @@
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
 </Properties>
