@@ -109,7 +109,7 @@ public class NewRelicMetricApiHandler
                     {
                         requestDto[0].Metrics.Add(new CustomNewRelicMetric
                         {
-                            Name = metricName,
+                            Name = $"azure.postgresserver.flexible.{metricName}",
                             Type = "gauge",
                             Value = metricValue.Average.Value,
                             Timestamp = metricValue.TimeStamp.ToUnixTimeMilliseconds(),
