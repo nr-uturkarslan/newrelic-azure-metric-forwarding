@@ -1,0 +1,15 @@
+{
+  "subscriptions": [
+    {
+      "id": "YOUR_SUBSCRIPTION_ID",
+      "resourceGroups": [
+        {
+          "name": "YOUR_RESOURCE_GROUP_NAME",
+          "postgresDatabaseNames": [
+            "YOUR_POSTGRES_SERVER_NAME"
+          ]
+        }
+      ]
+    }
+  ]
+}
