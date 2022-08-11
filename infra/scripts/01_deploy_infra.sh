@@ -16,6 +16,7 @@ instance="001"
 ### Set variables
 resourceGroupName="rg$program$locationShort$project$stageShort$instance"
 storageAccountName="st$program$locationShort$project$stageShort$instance"
+configBlobContainerName="config"
 appInsightsName="appins$program$locationShort$project$stageShort$instance"
 appServicePlanName="plan$program$locationShort$project$stageShort$instance"
 functionAppName="func$program$locationShort$project$stageShort$instance"
@@ -63,6 +64,40 @@ if [[ $storageAccount == "" ]]; then
   echo -e "Storage account is created.\n"
 else
   echo -e "Storage account already exists.\n"
+fi
+
+# Blob container (config)
+echo -e "Retrieving storage account connection string..."
+storageAccountConnectionString=$(az storage account show-connection-string \
+  --resource-group $resourceGroupName \
+  --name $storageAccountName \
+  | jq -r .connectionString \
+  2> /dev/null)
+
+if [[ $storageAccountConnectionString == "" ]]; then
+  echo -e "Storage account connection string could not be retrieved.\n"
+  exit 1
+fi
+
+echo "Checking config blob container..."
+
+blobContainer=$(az storage container show \
+  --account-name $storageAccountName \
+  --name $configBlobContainerName \
+  --connection-string $storageAccountConnectionString \
+  2> /dev/null)
+
+if [[ $blobContainer == "" ]]; then
+  echo "Config blob container does not exists. Creating..."
+
+  blobContainer=$(az storage container create \
+    --account-name $storageAccountName \
+    --name $configBlobContainerName \
+    --connection-string $storageAccountConnectionString)
+
+  echo -e "Config blob container is created.\n"
+else
+  echo -e "Config blob container already exists.\n"
 fi
 
 # Application insights
@@ -165,8 +200,9 @@ sleep 5
 # Account info
 subscriptionId=$(az account show | jq -r .id)
 subscriptionScope="/subscriptions/$subscriptionId"
+blobContainerScope="$subscriptionScope/resourceGroups/$resourceGroupName/providers/Microsoft.Storage/storageAccounts/$storageAccountName/blobServices/default/containers/$configBlobContainerName"
 
-# Monitoring reader role assignment
+# Monitoring Reader role assignment
 monitoringRoleAssignmentCount=$(az role assignment list \
   --assignee "$functionAppPrincipalId" \
   --role "Monitoring Reader" \
@@ -174,7 +210,7 @@ monitoringRoleAssignmentCount=$(az role assignment list \
   | jq '. | length' \
   2> /dev/null)
 
-if [[ $monitoringRoleAssignment -eq 0 ]]; then
+if [[ $monitoringRoleAssignmentCount -eq 0 ]]; then
   echo "Function app does not have Monitoring Reader role. Assigning..."
 
   monitoringRoleAssignment=$(az role assignment create \
@@ -186,4 +222,26 @@ if [[ $monitoringRoleAssignment -eq 0 ]]; then
   echo -e "Monitoring Reader role is assinged.\n"
 else
   echo -e "Function app already has Monitoring Reader role.\n"
+fi
+
+# Storage Blob Data Contributor role assignment
+blobContributorRoleAssignmentCount=$(az role assignment list \
+  --assignee "$functionAppPrincipalId" \
+  --role "Storage Blob Data Contributor" \
+  --scope "$configBlobContainerName" \
+  | jq '. | length' \
+  2> /dev/null)
+
+if [[ $blobContributorRoleAssignmentCount -eq 0 ]]; then
+  echo "Function app does not have Storage Blob Data Contributor role. Assigning..."
+
+  blobContributorRoleAssignment=$(az role assignment create \
+      --assignee "$functionAppPrincipalId" \
+      --role "Storage Blob Data Contributor" \
+      --scope $blobContainerScope \
+    2> /dev/null)
+
+  echo -e "Storage Blob Data Contributor role is assinged.\n"
+else
+  echo -e "Function app already has Storage Blob Data Contributor role.\n"
 fi
