@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 using Azure.Identity;
 using Azure.Storage.Blobs;
@@ -25,7 +26,7 @@ public class PostgresConfigReader : IPostgresConfigReader
     public PostgresConfigReader()
     {
         _containerClient = new BlobContainerClient(
-            new Uri("uri"),
+            new Uri("YOUR_BLOB_CONTAINER_URI"),
             new DefaultAzureCredential()
         );
 
@@ -39,9 +40,10 @@ public class PostgresConfigReader : IPostgresConfigReader
         try
         {
             var blob = await _containerClient.GetBlobClient(CONFIG_FILE_NAME)
-            .DownloadContentAsync();
-        
-            var config = JsonConvert.DeserializeObject<PostgresConfig>(blob.ToString());
+                .DownloadContentAsync();
+
+            var blobAsString = Encoding.UTF8.GetString(blob.Value.Content);
+            var config = JsonConvert.DeserializeObject<PostgresConfig>(blobAsString);
 
             LogConfigFileRead();
 
