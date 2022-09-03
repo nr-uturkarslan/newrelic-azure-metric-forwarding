@@ -146,7 +146,8 @@ public class NewRelicMetricApiHandler
             Content = stringContent
         };
 
-        httpRequest.Headers.Add("Api-Key", "");
+        httpRequest.Headers.Add("Api-Key",
+            Environment.GetEnvironmentVariable("NEW_RELIC_LICENSE_KEY"));
 
         var response = await _httpClient.SendAsync(httpRequest);
 

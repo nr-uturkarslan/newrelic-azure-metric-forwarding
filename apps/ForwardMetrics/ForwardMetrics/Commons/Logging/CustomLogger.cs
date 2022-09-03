@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,7 +49,8 @@ public class CustomLogger
             Content = stringContent
         };
 
-        httpRequest.Headers.Add("Api-Key", "");
+        httpRequest.Headers.Add("Api-Key",
+            Environment.GetEnvironmentVariable("NEW_RELIC_LICENSE_KEY"));
 
         await _httpClient.SendAsync(httpRequest);
     }
