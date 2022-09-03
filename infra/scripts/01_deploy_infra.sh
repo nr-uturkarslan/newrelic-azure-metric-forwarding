@@ -228,7 +228,7 @@ fi
 blobContributorRoleAssignmentCount=$(az role assignment list \
   --assignee "$functionAppPrincipalId" \
   --role "Storage Blob Data Contributor" \
-  --scope "$configBlobContainerName" \
+  --scope "$blobContainerScope" \
   | jq '. | length' \
   2> /dev/null)
 
