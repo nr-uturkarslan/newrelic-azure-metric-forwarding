@@ -26,7 +26,7 @@ public class PostgresConfigReader : IPostgresConfigReader
     public PostgresConfigReader()
     {
         _containerClient = new BlobContainerClient(
-            new Uri("YOUR_BLOB_CONTAINER_URI"),
+            new Uri(Environment.GetEnvironmentVariable("CONFIG_BLOB_URI")),
             new DefaultAzureCredential()
         );
 

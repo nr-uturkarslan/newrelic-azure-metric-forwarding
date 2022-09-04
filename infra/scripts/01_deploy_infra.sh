@@ -194,6 +194,19 @@ else
   echo -e "Function app system assigned identity already exists.\n"
 fi
 
+# Set function app environment variables
+az functionapp config appsettings set \
+  --resource-group $resourceGroupName \
+  --name $functionAppName \
+  --settings "NEW_RELIC_LICENSE_KEY=$NEWRELIC_LICENSE_KEY" \
+  > /dev/null
+
+az functionapp config appsettings set \
+  --resource-group $resourceGroupName \
+  --name $functionAppName \
+  --settings "CONFIG_BLOB_URI=https://$storageAccountName.blob.core.windows.net/$configBlobContainerName" \
+  > /dev/null
+
 # The identity is not assigned directly, wait for a while
 sleep 5
 
