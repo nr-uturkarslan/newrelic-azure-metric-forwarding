@@ -15,7 +15,13 @@ public class MetricProcessor
 {
     private readonly string[] POSTGRES_METRIC_NAMES = new string[]
     {
-        "IOPS",
+        "read_iops",
+        "write_iops",
+        "cpu_percent",
+        "memory_percent",
+        "read_throughput",
+        "write_throughput",
+        "connections_failed",
     };
 
     private readonly string _subscriptionId;
@@ -169,9 +175,9 @@ public class MetricProcessor
         {
             ClassName = nameof(MetricProcessor),
             MethodName = nameof(PerformMetricQuery),
-            LogLevel = LogLevel.Information,
+            LogLevel = LogLevel.Error,
             TimeUtc = DateTimeOffset.UtcNow,
-            Message = "Metric query is performed.",
+            Message = "Metric query is failed.",
             Exception = exception,
 
             SubscriptionId = _subscriptionId,
